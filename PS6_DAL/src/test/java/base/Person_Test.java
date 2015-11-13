@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.text.ParseException;
 
 public class Person_Test {
+	private static PersonDomainModel Person;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -42,6 +43,10 @@ public class Person_Test {
 
 	@After
 	public void tearDown() throws Exception {
+		PersonDomainModel person;	
+		PersonDAL.deletePerson(Person.getPersonID());
+		person = PersonDAL.getPerson(Person.getPersonID());
+		assertNull(person);	
 		
 	}
 
@@ -52,6 +57,7 @@ public class Person_Test {
 		TestPerson = PersonDAL.getPerson(Person.getPersonID());
 		assertNull(TestPerson);
 		PersonDAL.addPerson(Person);
+		
 		TestPerson = PersonDAL.getPerson(Person.getPersonID());
 		assertNotNull(TestPerson);
 		//check to make sure it isnt there,add it, make sure its there
@@ -62,12 +68,12 @@ public class Person_Test {
 		PersonDomainModel DeleteTestPerson;
 		DeleteTestPerson = PersonDAL.getPerson(Person.getPersonID());
 		PersonDAL.addPerson(Person);
-		// Make sure the person was added before deleting them
 		assertNotNull(Person);
+		//make sure person is in database before deletion
 		
 		PersonDAL.deletePerson(Person.getPersonID());
 		DeleteTestPerson = PersonDAL.getPerson(Person.getPersonID());
-		// Make sure they were deleted
+		// Make sure they were deleted from the database
 		assertNull(DeleteTestPerson);
 	}
 
@@ -76,15 +82,17 @@ public class Person_Test {
 public void UpdatePersonTest()
 {
 	PersonDomainModel UpdateTester;
-	String New_Name = "John";
+	String New_FName = "John";
 	
 	UpdateTester = PersonDAL.getPerson(Person.getPersonID());
 	PersonDAL.addPerson(Person);
 	
-	Person.setFirstName(New_Name);
+	Person.setFirstName(New_FName);
 	PersonDAL.updatePerson(Person);
+	
 	UpdateTester = PersonDAL.getPerson(Person.getPersonID());
-	assertTrue(UpdateTester.getFirstName() == New_Name);
+	
+	assertTrue(UpdateTester.getFirstName() == New_FName);
 }
 	
 }
