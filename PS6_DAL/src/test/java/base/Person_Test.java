@@ -71,7 +71,6 @@ public class Person_Test {
 		assertNull(DeleteTestPerson);
 	}
 
-}
 
 @Test
 public void UpdatePersonTest()
